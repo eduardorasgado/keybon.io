@@ -27,51 +27,77 @@ function generateRandomKey() {
 
 function nextLevel(nivelActual) {
 	//si se llega al ultimo nivel y pasa la ronda
-	if(nivelActual == (niveles)) {
-		setTimeout(() => alert('Ganaste'), 100)
+	if(nivelActual == niveles) {
+		return swal({
+			title: "Ganaste todas campeón! / You won like a boss!",
+			type: "success",
+			icon: "success"
+		})
 	}
-	//cada nivel
-	confirm(`Nivel actual: ${nivelActual+1}`)
-
-	//mostrar las keys que debe tocar el usuario
-	for(let i = 0; i <= nivelActual; i++){
-		setTimeout(() => activate(keys[i]),1000*(i+1))
-	}
-
-	//dejar al usuario que comience a tocar las teclas(mimic)
-	let i = 0
-	let teclaActual = keys[i]
-
-	window.addEventListener('keydown', onkeyDown)
-
-	function onkeyDown(event) {
-		//en caso de acertar la tecla debida
-		if (event.keyCode == teclaActual) {
-			//activar la tecla en verde
-			activate(teclaActual, { success:true, fail: false})
-			//incrementa la flag para analizar la siguiente techa
-			i++
-			//si ya termina de poner todas las teclas en el nivel debido
-			if (i > nivelActual) {
-				//quitar la escucha
-				window.removeEventListener('keydown', onkeyDown)
-				//llamar al nivel siguiente
-				setTimeout(() => nextLevel(i), 1500)
+	//cada nivel	
+	swal(`Nivel actual: ${nivelActual+1}`, {
+	  icon: "success",
+	  buttons: {
+	    cancel: "Adios! / Run away!",
+	    catch: {
+	      text: "Vamos! / Go ahead!",
+	      value: "catch",
+	    }
+	  },
+	})
+	.then((value) => {
+	  switch (value) {
+	    case "catch":
+	    	//mostrar las keys que debe tocar el usuario
+			for(let i = 0; i <= nivelActual; i++){
+				setTimeout(() => activate(keys[i]),1000*(i+1))
 			}
-			//cambiar la tecla actual aqui porque no hay un ciclo para iterar
-			teclaActual = keys[i]
-		} 
-		//el caso erroneo de apretar la tecla
-		else {
-			//activar tecla erronea y tecla que debia ser apretada
-			activate(event.keyCode, {success: false, fail: true });
-		    activate(teclaActual, {});
-		    //apagar escucha
-		    window.removeEventListener('keydown', onkeydown);
-		    //alerta de fallo
-			setTimeout(() => alert('Perdiste :( / Game Over :('), 1000)
-		}
-	}
+
+			//dejar al usuario que comience a tocar las teclas(mimic)
+			let i = 0
+			let teclaActual = keys[i]
+
+			window.addEventListener('keydown', onkeyDown)
+
+			function onkeyDown(event) {
+				//en caso de acertar la tecla debida
+				if (event.keyCode == teclaActual) {
+					//activar la tecla en verde
+					activate(teclaActual, { success:true, fail: false})
+					//incrementa la flag para analizar la siguiente techa
+					i++
+					//si ya termina de poner todas las teclas en el nivel debido
+					if (i > nivelActual) {
+						//quitar la escucha
+						window.removeEventListener('keydown', onkeyDown)
+						//llamar al nivel siguiente
+						setTimeout(() => nextLevel(i), 1500)
+					}
+					//cambiar la tecla actual aqui porque no hay un ciclo para iterar
+					teclaActual = keys[i]
+				} 
+				//el caso erroneo de apretar la tecla
+				else {
+					//activar tecla erronea y tecla que debia ser apretada
+					activate(event.keyCode, {success: false, fail: true });
+				    activate(teclaActual, {});
+				    //apagar escucha
+				    window.removeEventListener('keydown', onkeydown);
+				    //alerta de fallo
+					setTimeout(() => {
+						swal({
+							title: "Has perdido! / You totally lose!",
+							icon: "warning"
+						})
+					}, 1000)
+					return false
+				}
+			}
+	      break;
+	  }
+	});
+
+	
 }
 
 function getkeyCode(key) {
