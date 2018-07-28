@@ -101,11 +101,25 @@ function main() {
 			clearInterval(intervalo)
 		}
 		//confirmacion, si no hay juego entonces no hace nada
-		const play = confirm("Vas a jugar?/ Are you ready?")
-		if (play){
-			//inicia el juego
-			setTimeout(() => nextLevel(0),1000)
-		}
+		//const play = confirm("Vas a jugar?/ Are you ready?")
+
+		swal("Listo para jugar?/ Are you ready?", {
+		  buttons: {
+		    cancel: "Adios! / Run away!",
+		    catch: {
+		      text: "Si / Go!",
+		      value: "catch",
+		    }
+		  },
+		})
+		.then((value) => {
+		  switch (value) {
+		    case "catch":
+		      setTimeout(() => nextLevel(0),1000)
+		      break;
+		  }
+		});
+
 	}, 1000)
 	
 	///setTimeout(() => nextLevel(0), 5000)
@@ -115,4 +129,4 @@ function main() {
 //iniciar secuencia de juego luego de presentacion
 setTimeout(() => {
 	main()
-}, 3000)
+}, 2000)
