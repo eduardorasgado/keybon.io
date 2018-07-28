@@ -82,7 +82,7 @@ function nextLevel(nivelActual) {
 					activate(event.keyCode, {success: false, fail: true });
 				    activate(teclaActual, {});
 				    //apagar escucha
-				    window.removeEventListener('keydown', onkeydown);
+				    window.removeEventListener('keydown', onkeyDown);
 				    //alerta de fallo
 					setTimeout(() => {
 						swal({
