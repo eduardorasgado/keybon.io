@@ -4,7 +4,7 @@ startShow = [81,65,90,87,83,88,69,68,67,82,70,86,84,71,66,89,72,78,85,74,77,73,7
 
 const intervalo = setInterval(() => {
 	if (tempo <=25){
-		activate(startShow[tempo])
+		activate(startShow[tempo], { success: false, fail: false })
 		tempo++
 	}
 }, 20)
